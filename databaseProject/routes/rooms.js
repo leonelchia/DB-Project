@@ -5,6 +5,7 @@ var jsonParser = bodyParser.json()
 var RoomService = require("../services/RoomService")
 var db = require("../models");
 var roomService = new RoomService(db);
+
 /* GET rooms listing. */
 
 router.get('/', async function(req, res, next) {
@@ -25,5 +26,14 @@ router.delete('/', jsonParser, async function(req, res, next) {
   await roomService.deleteRoom(id);
   res.end()
 });
+
+router.post('/reservation', jsonParser, async function(req, res, next) {
+    let userId = req.body.UserId;
+    let roomId = req.body.RoomId;
+    let startDate = req.body.StartDate;
+    let endDate = req.body.EndDate;
+    await roomService.rentARoom(userId, roomId, startDate, endDate);
+    res.end()
+  });
 
 module.exports = router;
